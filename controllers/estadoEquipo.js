@@ -47,5 +47,29 @@ const getEstadoEquipos = async (req = request, res = response) => {
     
 }
 
+//Actualizar 
+const updateEstadoEquipoByID = async (req = request, res = response) => 
+{
+try{
+        console.log(req.body)
+        console.log(req.params)
+        const data = req.body
+        const id = req.params.id
+    /*
+    const estadoEquipoDB = await EstadoEquipo.findById(id)
+    if(!estadoEquipoDB){
+        return res.json({msg: 'No existe ese estado de equipo'})
+    }
+    */
+        data.fechaActualizacion = new Date()
+        console.log(data)
+        const estadoEquipo = await EstadoEquipo.findByIdAndUpdate(id, data, {new: true})
+        return res.json(estadoEquipo)
+    }catch(e){
+        console.log(e)
+        return res.status(500).json({msg: e})
+    }   
+    
+}
 
-module.exports = {createEstadoEquipo, getEstadoEquipos}
+module.exports = {createEstadoEquipo, getEstadoEquipos, updateEstadoEquipoByID}

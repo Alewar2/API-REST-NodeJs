@@ -47,5 +47,30 @@ const getMarcas = async (req = request, res = response) => {
     
 }
 
+//Actualizar 
+const updateMarcasByID = async (req = request, res = response) => 
+{
+try{
+        console.log(req.body)
+        console.log(req.params)
+        const data = req.body
+        const id = req.params.id
+    /*
+    const marcasDB = await Marcas.findById(id)
+    if(!marcasDB){
+        return res.json({msg: 'No existe la marca'})
+    }
+    */
+        data.fechaActualizacion = new Date()
+        console.log(data)
+        const marcas = await Marcas.findByIdAndUpdate(id, data, {new: true})
+        return res.json(marcas)
+    }catch(e){
+        console.log(e)
+        return res.status(500).json({msg: e})
+    }   
+    
+}
 
-module.exports = {createMarcas , getMarcas}
+
+module.exports = {createMarcas , getMarcas, updateMarcasByID}

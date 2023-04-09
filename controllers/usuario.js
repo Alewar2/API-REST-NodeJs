@@ -1,3 +1,4 @@
+
 const usuario = require('../models/usuario')
 const Usuario = require('../models/usuario')
 const {request, response} = require('express')
@@ -50,5 +51,31 @@ const getUsuario = async (req = request, res = response) => {
     
 }
 
+//Actualizar 
+const updateUsuarioByID = async (req = request, res = response) => 
+{
+try{
+        console.log(req.body)
+        console.log(req.params)
+        const data = req.body
+        const id = req.params.id
+    /*
+    const usuarioDB = await Usuario.findById(id)
+    if(!usuarioDB){
+        return res.json({msg: 'No existe el usuario'})
+    }
+    */
+        data.fechaActualizacion = new Date()
+        console.log(data)
+        const usuario = await Usuario.findByIdAndUpdate(id, data, {new: true})
+        return res.json(usuario)
+    }catch(e){
+        console.log(e)
+        return res.status(500).json({msg: e})
+    }   
+    
+}
 
-module.exports = {createUsuario, getUsuario}
+
+
+module.exports = {createUsuario, getUsuario, updateUsuarioByID}

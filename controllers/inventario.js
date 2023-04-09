@@ -4,6 +4,9 @@ const Usuario = require('../models/usuario')
 const Marca = require('../models/marcas')
 const EstadoEquipo = require('../models/estadoEquipo')
 const TipoEquipo = require('../models/tipoEquipo')
+const { trusted } = require('mongoose')
+const usuario = require('../models/usuario')
+const { getUsuario } = require('./usuario')
 
 
 
@@ -70,6 +73,24 @@ const getInventario = async (req = request, res = response) => {
 
     try{
        const inventarioDB = await Inventario.find()//select * from inventario
+       .populate({
+        path: 'usuario',
+        match:{estado: true}
+        
+       })
+       .populate({
+        path: 'marcas',
+        match:{estado: true}
+       })
+       .populate({
+        path: 'estadoEquipo',
+        match:{estado: true}
+       })
+       .populate({
+        path: 'tipoEquipo',
+        match: {estado: true}
+       })
+       
        return res.json(inventarioDB)
 
     }catch(e){
@@ -81,6 +102,19 @@ const getInventario = async (req = request, res = response) => {
     
 }
 
+//Actualizar inventario
+const updateInventarioByID = async (req= request, res = response) => {
+    try{
+        const { id } = req.params
+        const data = req.body
+        const inventario = await Inventario.findOneAndUpdate(id, data, {new: true})
+        return res.status(201).json(inventario)
+    }catch(e){
+        console.log(e)
+        return res.status(500).json({msg: 'Error'})
+    }
+}
 
-module.exports = {createInventario, getInventario}
+
+module.exports = {createInventario, getInventario, updateInventarioByID}
 

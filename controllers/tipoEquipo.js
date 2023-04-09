@@ -44,8 +44,32 @@ const getTipoEquipos = async (req = request, res = response) => {
         })
     }
 
+
+}
+//Actualizar 
+const updateTipoEquipoByID = async (req = request, res = response) => 
+{
+try{
+        console.log(req.body)
+        console.log(req.params)
+        const data = req.body
+        const id = req.params.id
+    /*
+    const tipoequipoDB = await TipoEquipo.findById(id)
+    if(!tipoequipoDB){
+        return res.json({msg: 'No existe el tipo de equipo'})
+    }
+    */
+        data.fechaActualizacion = new Date()
+        console.log(data)
+        const tipoEquipo = await TipoEquipo.findByIdAndUpdate(id, data, {new: true})
+        return res.json(tipoEquipo)
+    }catch(e){
+        console.log(e)
+        return res.status(500).json({msg: e})
+    }   
     
 }
 
 
-module.exports = {createTipoEquipo, getTipoEquipos}
+module.exports = {createTipoEquipo, getTipoEquipos, updateTipoEquipoByID}
